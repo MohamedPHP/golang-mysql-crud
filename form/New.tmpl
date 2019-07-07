@@ -1,0 +1,27 @@
+{{ define "New" }}
+    {{ template "Header" }}
+        <h2> Create New Users </h2>
+        <form class="form-horizontal" action="/insert" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="Name ...">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Email ...">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password ...">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    Save
+                </button>
+                <a href="/" class="btn btn-warning">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    {{ template "Footer" }}
+{{ end }}

@@ -1,0 +1,35 @@
+{{ define "Index" }}
+    {{ template "Header" }}
+        <h2> All Users </h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Name</td>
+                    <td>Email</td>
+                    <td>Password</td>
+                    <td>Created At</td>
+                    <td>Updated At</td>
+                    <td>Show</td>
+                    <td>Edit</td>
+                    <td>Delete</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range . }}
+                    <tr>
+                        <td>{{ .ID }}</td>
+                        <td>{{ .Name }}</td>
+                        <td>{{ .Email }}</td>
+                        <td>{{ .Password }}</td>
+                        <td>{{ .CreatedAt }}</td>
+                        <td>{{ .UpdatedAt }}</td>
+                        <td><a class="btn btn-info btn-sm" href="/show?id={{ .ID }}">View</a></td>
+                        <td><a class="btn btn-warning btn-sm" href="/edit?id={{ .ID }}">Edit</a></td>
+                        <td><a class="btn btn-danger btn-sm" href="/delete?id={{ .ID }}">Delete</a></td>
+                    </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    {{ template "Footer" }}
+{{ end }}
