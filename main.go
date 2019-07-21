@@ -86,15 +86,14 @@ func Show(w http.ResponseWriter, r *http.Request) {
 
 	nID := r.URL.Query().Get("id")
 
-	users, err := db.Query("SELECT * FROM users WHERE id=?", nID)
-
+	selDB, err := db.Query("SELECT * FROM users WHERE id=?", nID)
 	if err != nil {
 		panic(err.Error())
 	}
 
 	user := User{}
 
-	for users.Next() {
+	for selDB.Next() {
 		var id int
 		var name string
 		var email string
@@ -103,7 +102,7 @@ func Show(w http.ResponseWriter, r *http.Request) {
 		var createdAt string
 		var updatedAt string
 
-		err = users.Scan(&id, &name, &email, &password, &rememberToken, &createdAt, &updatedAt)
+		err = selDB.Scan(&id, &name, &email, &password, &rememberToken, &createdAt, &updatedAt)
 
 		if err != nil {
 			panic(err.Error())
@@ -117,7 +116,9 @@ func Show(w http.ResponseWriter, r *http.Request) {
 		user.CreatedAt = createdAt
 		user.UpdatedAt = updatedAt
 	}
+
 	tmpl.ExecuteTemplate(w, "Show", user)
+
 	defer db.Close()
 }
 
@@ -132,15 +133,14 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 
 	nID := r.URL.Query().Get("id")
 
-	users, err := db.Query("SELECT * FROM users WHERE id=?", nID)
-
+	selDB, err := db.Query("SELECT * FROM users WHERE id=?", nID)
 	if err != nil {
 		panic(err.Error())
 	}
 
 	user := User{}
 
-	for users.Next() {
+	for selDB.Next() {
 		var id int
 		var name string
 		var email string
@@ -149,7 +149,7 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 		var createdAt string
 		var updatedAt string
 
-		err = users.Scan(&id, &name, &email, &password, &rememberToken, &createdAt, &updatedAt)
+		err = selDB.Scan(&id, &name, &email, &password, &rememberToken, &createdAt, &updatedAt)
 
 		if err != nil {
 			panic(err.Error())
@@ -165,6 +165,7 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl.ExecuteTemplate(w, "Edit", user)
+
 	defer db.Close()
 }
 
@@ -206,7 +207,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	db := dbConn()
 	if r.Method == "POST" {
 
-		insForm, err := db.Prepare("UPDATE Employee SET name=?, email=?, password=?, updatedAt=? WHERE id=?")
+		updateForm, err := db.Prepare("UPDATE users SET name=?, email=?, password=?, updatedAt=? WHERE id=?")
 
 		if err != nil {
 			panic(err.Error())
@@ -214,7 +215,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 		currentTime := time.Now()
 
-		insForm.Exec(r.FormValue("name"), r.FormValue("email"), r.FormValue("password"), currentTime.Format("2006-01-02 15:04:05"), r.FormValue("uid"))
+		updateForm.Exec(r.FormValue("name"), r.FormValue("email"), r.FormValue("password"), currentTime.Format("2006-01-02 15:04:05"), r.FormValue("uid"))
 
 		log.Println("Update Record #" + r.FormValue("uid") + " : Name: " + r.FormValue("name"))
 	}
@@ -246,7 +247,7 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Println("HTTP server started at http://127.0.0.1:8000")
+	fmt.Println("HTTP server started at http://127.0.0.1:8080")
 
 	http.HandleFunc("/", Index)
 	http.HandleFunc("/show", Show)
@@ -256,5 +257,5 @@ func main() {
 	http.HandleFunc("/update", Update)
 	http.HandleFunc("/delete", Delete)
 
-	http.ListenAndServe(":8000", nil)
+	http.ListenAndServe(":8080", nil)
 }

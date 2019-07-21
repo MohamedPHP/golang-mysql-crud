@@ -1,0 +1,22 @@
+{{ define "Show" }}
+    {{ template "Header" }}
+        <h2> Create New Users: {{ .ID }}</h2>
+
+        <br><hr>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <strong>Name: </strong> {{ .Name }}
+                <br><hr>
+            </div>
+             <div class="col-md-12">
+                <strong>Email: </strong> {{ .Email }}
+                <br><hr>
+            </div>
+             <div class="col-md-12">
+                <strong>CreatedAt: </strong> {{ .CreatedAt }}
+                <br><hr>
+            </div>
+        </div>
+    {{ template "Footer" }}
+{{ end }}
